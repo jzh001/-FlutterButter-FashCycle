@@ -44,7 +44,7 @@ class _AuthFormState extends State<AuthForm> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                "FlutterButter",
+                "FashCycle",
                 style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),

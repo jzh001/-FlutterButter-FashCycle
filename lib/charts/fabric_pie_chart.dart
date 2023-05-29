@@ -52,6 +52,7 @@ class FabricPieChart extends StatelessWidget {
                         textStyle: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
+                          fontSize: 9,
                         ),
                       ),
                     )
