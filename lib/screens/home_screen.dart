@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterbutter/charts/carbon_line_chart.dart';
 import 'package:flutterbutter/charts/shopping_pie_chart.dart';
 import 'package:flutterbutter/charts/fabric_pie_chart.dart';
 import 'package:flutterbutter/widgets/app_drawer.dart';
@@ -32,10 +33,25 @@ class HomeScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.displaySmall,
                 ),
               )),
-          Row(children: [
-            FabricPieChart(),
-            ShoppingPieChart(),
-          ]),
+          Expanded(
+            child: SizedBox(
+              child: ListView(children: [
+                CarbonLineChart(
+                  variable: "Carbon Savings",
+                ),
+                const Row(children: [
+                  FabricPieChart(),
+                  ShoppingPieChart(),
+                ]),
+                CarbonLineChart(
+                  variable: "Total Fabric",
+                ),
+                CarbonLineChart(
+                  variable: "Spending",
+                ),
+              ]),
+            ),
+          ),
         ],
       ),
     );
