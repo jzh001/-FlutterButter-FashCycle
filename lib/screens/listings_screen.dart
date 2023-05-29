@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterbutter/models/listings.dart';
 import 'package:flutterbutter/screens/listing_detail_screen.dart';
 import 'package:flutterbutter/widgets/app_drawer.dart';
-import 'package:provider/provider.dart';
+import 'package:flutterbutter/widgets/no_data_icon.dart';
 
 class ListingsScreen extends StatefulWidget {
   const ListingsScreen({super.key});
@@ -32,10 +32,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
                 child: CircularProgressIndicator(),
               );
             }
-            if (!snapshot.hasData) {
-              return const Center(
-                child: Text("No Data Found"),
-              );
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return const NoDataIcon();
             }
 
             return GridView.count(
@@ -46,8 +44,8 @@ class _ListingsScreenState extends State<ListingsScreen> {
                         coverImgLink: item["Image Link"],
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx2) =>
-                                  ListingDetailScreen(listItem: convertToItem(item))));
+                              builder: (ctx2) => ListingDetailScreen(
+                                  listItem: convertToItem(item))));
                         }))
                     .toList());
           }),
@@ -59,8 +57,18 @@ class _ListingsScreenState extends State<ListingsScreen> {
       ),
     );
   }
+
   ListItem convertToItem(QueryDocumentSnapshot item) {
-    return ListItem(author: item["Author"], buyer: item["Buyer"], description: item["Description"], id: item.id, imageLink: item["Image Link"], price: item["Price"], status: item["Status"], title: item["Title"], type: item["Type"]);
+    return ListItem(
+        author: item["Author"],
+        buyer: item["Buyer"],
+        description: item["Description"],
+        id: item.id,
+        imageLink: item["Image Link"],
+        price: item["Price"],
+        status: item["Status"],
+        title: item["Title"],
+        type: item["Type"], material: item["Material"]);
   }
 }
 
@@ -126,6 +134,4 @@ class MenuTile extends StatelessWidget {
       ),
     );
   }
-
-  
 }

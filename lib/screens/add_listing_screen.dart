@@ -22,7 +22,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String title = "";
   String description = "";
   double? price;
-  String clothingType = "Men's Shirt";
+  String clothingType = "Jacket";
+  String material = "Cotton";
 
   bool _isLoading = false;
 
@@ -63,6 +64,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   image: _pickedImage!,
                   price: price!,
                   type: clothingType,
+                  material: material,
                 );
                 setState(() {
                   _isLoading = false;
@@ -110,7 +112,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             : null;
                       },
                     ),
-                    const SizedBox(height: 10),
                     TextFormField(
                       maxLength: 200,
                       decoration:
@@ -124,7 +125,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             : null;
                       },
                     ),
-                    const SizedBox(height: 20),
                     TextFormField(
                       decoration: const InputDecoration(labelText: "Price"),
                       keyboardType: const TextInputType.numberWithOptions(
@@ -140,19 +140,15 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             : null;
                       },
                     ),
-                    const SizedBox(height: 20),
                     DropdownButtonFormField(
                         decoration:
                             const InputDecoration(label: Text("Clothing Type")),
                         value: clothingType,
                         items: [
-                          "Men's Shirt",
-                          "Men's Pants",
-                          "Men's Trousers",
-                          "Dresses",
-                          "Skirts",
-                          "Women's Shirt",
-                          "Women's Pants"
+                          "Jacket",
+                          "Pants",
+                          "Shirt",
+                          "Dress",
                         ]
                             .map((e) => DropdownMenuItem(
                                   value: e,
@@ -161,6 +157,27 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             .toList(),
                         onChanged: (val) {
                           clothingType = val!;
+                        }),
+                    DropdownButtonFormField(
+                        decoration:
+                            const InputDecoration(label: Text("Material")),
+                        value: material,
+                        items: [
+                          "Cotton",
+                          "Acrylic Fabric",
+                          "Linen",
+                          "Nylon",
+                          "Silk",
+                          "Wool",
+                          "Polyester"
+                        ]
+                            .map((e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Text(e),
+                                ))
+                            .toList(),
+                        onChanged: (val) {
+                          material = val!;
                         }),
                     const SizedBox(height: 20),
                     ElevatedButton(

@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterbutter/models/listings.dart';
-import 'package:provider/provider.dart';
 
 class UserData with ChangeNotifier {
   String username = "";
@@ -12,6 +11,7 @@ class UserData with ChangeNotifier {
   double currentSavings = 0;
   double totalSpending = 0;
   double carbonSavings = 0;
+  double totalFabric = 0;
 
   Future<void> initUser() async {
     final userData = await FirebaseFirestore.instance
@@ -23,6 +23,7 @@ class UserData with ChangeNotifier {
     currentSavings = userData["Current Savings"].toDouble();
     totalSpending = userData["Total Spending"].toDouble();
     carbonSavings = userData["Carbon Savings"].toDouble();
+    totalFabric = userData["Total Fabric"].toDouble();
     log(carbonSavings.toString());
     log("Ok");
     notifyListeners();
@@ -30,51 +31,66 @@ class UserData with ChangeNotifier {
 
   Future<void> buyItem(ListItem listItem) async {
     totalSpending += listItem.price;
-    carbonSavings += 1;
-    FirebaseFirestore.instance
+    carbonSavings +=
+        typeToFabric(listItem.type) * materialToCarbon(listItem.material);
+    totalFabric += typeToFabric(listItem.type);
+    await FirebaseFirestore.instance
         .collection("Users")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .update({
       "Total Spending": totalSpending,
       "Carbon Savings": carbonSavings,
+      "Total Fabric": totalFabric,
     });
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection("Users")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection("History")
-        .add({"id": listItem.id, "Timestamp": DateTime.now()});
+        .add({
+      "id": listItem.id,
+      "Timestamp": DateTime.now(),
+      "Total Fabric": totalFabric,
+      "Spending": totalSpending,
+      "Carbon Savings": carbonSavings
+    });
     notifyListeners();
   }
 
-  Future<List<ChartData>> getHistoryBreakdown(BuildContext ctx) async {
-    print("Function run");
-    final history = await FirebaseFirestore.instance
-        .collection("Users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("History")
-        .get();
-    print("OK2");
-    final myTransactions = history.docs.map(
-        (e) => Provider.of<Listings>(ctx, listen: false).retrieveByID(e["id"]));
-    final elements = myTransactions.map((item) => item.type);
-
-    var map = {};
-
-    for (var x in elements) {
-      map[x] = !map.containsKey(x) ? (1) : (map[x] + 1);
+  static double typeToFabric(String type) {
+    // in m^2
+    switch (type) {
+      case "Jacket":
+        return 1.47 * 2;
+      case "Pants":
+        return (1.3 * 2 + 0.25) * 1.47;
+      case "Shirt":
+        return 0.91 * 2.4;
+      case "Dress":
+        return 6 * 1.47;
+      default:
+        return 0;
     }
-    List<ChartData> ret = [];
-    map.forEach((key, value) => ret.add(ChartData(key, value.toDouble())));
-    print("RET");
-    print(ret);
-    print(ret.length);
-
-    return ret;
   }
-}
 
-class ChartData {
-  ChartData(this.x, this.y);
-  final String x;
-  final double y;
+  static double materialToCarbon(String material) {
+    // kg / m^2
+    switch (material) {
+      case "Cotton":
+        return 8.3 / 2;
+      case "Acrylic Fabric":
+        return 11.53 / 2;
+      case "Linen":
+        return 4.5 / 2;
+      case "Nylon":
+        return 7.31 / 2;
+      case "Silk":
+        return 7.63 / 2;
+      case "Wool":
+        return 13.83 / 2;
+      case "Polyester":
+        return 6.4 / 2;
+      default:
+        return 0;
+    }
+  }
 }

@@ -257,6 +257,7 @@ class _AuthFormState extends State<AuthForm> {
           'Current Savings': 0,
           'Total Spending': 0,
           'Carbon Savings': 0,
+          'Total Fabric': 0,
           //'status': "pending",
         });
       }

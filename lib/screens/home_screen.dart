@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutterbutter/charts/shopping_pie_chart.dart';
+import 'package:flutterbutter/charts/fabric_pie_chart.dart';
 import 'package:flutterbutter/widgets/app_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -7,9 +9,35 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("FashCycle")),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.green.shade200,
+      ),
       drawer: const AppDrawer(),
-      body: const Center(child: Text("FlutterButter")),
+      body: Column(
+        children: [
+          Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.2,
+              decoration: BoxDecoration(
+                color: Colors.green.shade200,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(15),
+                  bottomRight: Radius.circular(15),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  "FashCycle",
+                  style: Theme.of(context).textTheme.displaySmall,
+                ),
+              )),
+          Row(children: [
+            FabricPieChart(),
+            ShoppingPieChart(),
+          ]),
+        ],
+      ),
     );
   }
 }

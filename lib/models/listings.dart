@@ -10,47 +10,6 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:provider/provider.dart';
 
 class Listings with ChangeNotifier {
-  List<ListItem> allListings = [];
-
-  bool isInit = false;
-
-  Listings() {
-    initListings();
-  }
-
-  Future<void> initListings() async {
-    //if (isInit) return;
-    print("Running function");
-    final listingData = await FirebaseFirestore.instance
-        .collection("Listings")
-        .limit(100)
-        .get();
-    print("Length 1 is ${listingData.docs.length}");
-    try {
-      allListings = listingData.docs
-          .map((item) => ListItem(
-              id: item.id,
-              title: item["Title"],
-              description: item["Description"],
-              price: item["Price"].toDouble(),
-              status: item["Status"],
-              imageLink: item["Image Link"],
-              author: item["Author"],
-              buyer: item["Buyer"],
-              type: item["Type"]))
-          .toList();
-    } catch (error) {
-      print(error.toString());
-    }
-    print("Length 2 is ${allListings.length}");
-    isInit = true;
-    notifyListeners();
-  }
-
-  List<ListItem> getCurrentListings() {
-    return allListings.where((element) => element.status == "Active").toList();
-  }
-
   Future<void> addListing({
     required String title,
     required String description,
@@ -58,12 +17,12 @@ class Listings with ChangeNotifier {
     required double price,
     required XFile image,
     required String type,
+    required String material,
   }) async {
     log("Ready for adding");
     final imageLink = await uploadImageToFirebase(image);
     log("Image uploaded");
-    final response =
-        await FirebaseFirestore.instance.collection("Listings").add({
+    await FirebaseFirestore.instance.collection("Listings").add({
       "Title": title,
       "Description": description,
       "Price": price,
@@ -72,59 +31,34 @@ class Listings with ChangeNotifier {
       "Image Link": imageLink,
       "Buyer": "NIL",
       "Type": type,
-      "Timestamp": DateTime.fromMicrosecondsSinceEpoch(0),
+      "Material": material,
+      "Buy Timestamp": DateTime.now(),
+      "Sell Timestamp": DateTime.fromMicrosecondsSinceEpoch(0),
     });
-
-    allListings.add(
-      ListItem(
-        id: response.id,
-        title: title,
-        description: description,
-        price: price,
-        status: "Active",
-        imageLink: imageLink,
-        author: author,
-        buyer: "NIL",
-        type: type,
-      ),
-    );
 
     notifyListeners();
   }
 
   Future<void> buyItem(ListItem item, BuildContext ctx) async {
-    final boughtItem =
-        allListings.firstWhere((element) => element.id == item.id);
-    boughtItem.status = "Bought";
-    boughtItem.buyer = Provider.of<UserData>(ctx, listen: false).username;
     await FirebaseFirestore.instance
         .collection("Listings")
         .doc(item.id)
         .update({
       "Buyer": Provider.of<UserData>(ctx, listen: false).username,
       "Status": "Bought",
-      "Timestamp": DateTime.now(),
+      "Sell Timestamp": DateTime.now(),
     });
 
     notifyListeners();
   }
 
-  Future<void> deleteByID(String id) async {
-    final deletedItem = allListings.firstWhere((item) => item.id == id);
+  Future<void> delete(ListItem deletedItem) async {
     deleteImageFromFirebase(deletedItem.imageLink);
-    allListings.removeWhere((item) => item.id == id);
-    await FirebaseFirestore.instance.collection("Listings").doc(id).delete();
+    await FirebaseFirestore.instance
+        .collection("Listings")
+        .doc(deletedItem.id)
+        .delete();
     notifyListeners();
-  }
-
-  ListItem retrieveByID(String id) {
-    if (allListings.indexWhere((item) => item.id == id) == -1) {
-      print("NOK");
-      print(allListings);
-      print(id);
-    }
-    final ret = allListings.firstWhere((item) => item.id == id);
-    return ret;
   }
 
   Future<void> deleteImageFromFirebase(String imageUrl) async {
@@ -168,6 +102,7 @@ class ListItem {
   String author = "";
   String buyer = "NIL";
   String type = "";
+  String material = "";
   ListItem({
     required this.id,
     required this.title,
@@ -178,5 +113,6 @@ class ListItem {
     required this.author,
     required this.buyer,
     required this.type,
+    required this.material,
   });
 }

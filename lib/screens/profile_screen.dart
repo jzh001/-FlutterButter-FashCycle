@@ -1,10 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:flutterbutter/charts/shopping_pie_chart.dart';
 import 'package:flutterbutter/models/user_data.dart';
 import 'package:flutterbutter/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -13,7 +11,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
+    return Scaffold(
       appBar: AppBar(title: const Text("Profile")),
       drawer: const AppDrawer(),
       body: Padding(
@@ -57,7 +55,7 @@ class ProfileScreen extends StatelessWidget {
                   width: 10,
                 ),
                 Text(
-                    "Total Carbon Savings: ${Provider.of<UserData>(context).carbonSavings}")
+                    "Total Carbon Savings: ${Provider.of<UserData>(context).carbonSavings.toStringAsFixed(2)}")
               ]),
             ),
             Card(
@@ -73,34 +71,10 @@ class ProfileScreen extends StatelessWidget {
                   width: 10,
                 ),
                 Text(
-                    "Total Spending: ${Provider.of<UserData>(context).totalSpending}")
+                    "Total Spending: ${Provider.of<UserData>(context).totalSpending.toStringAsFixed(2)}")
               ]),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 60,
-              child: Card(
-                color: Theme.of(context).primaryColorLight,
-                child: FutureBuilder(
-                    future: Provider.of<UserData>(context)
-                        .getHistoryBreakdown(context),
-                    builder: (ctx, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      log("OK");
-                      return SfCircularChart(series: <CircularSeries>[
-                        PieSeries<ChartData, String>(
-                            dataSource: snapshot.data,
-                            xValueMapper: (ChartData data, _) => data.x,
-                            yValueMapper: (ChartData data, _) => data.y,
-                            // Radius of pie
-                            radius: '50%')
-                      ]);
-                    }),
-              ),
-            )
+            const ShoppingPieChart(),
           ],
         ),
       ),

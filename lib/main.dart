@@ -62,8 +62,7 @@ class MyApp extends StatelessWidget {
               const PastTransactionsScreen(),
         },
         home: FutureBuilder(
-            future: initFirebase().then((value) =>
-                Provider.of<Listings>(context, listen: false).initListings()),
+            future: initFirebase(),
             builder: (ctx, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Scaffold(
