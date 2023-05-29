@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "98254208989",
+    "firebase_url": "https://flutterbutter-ce9b3-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "flutterbutter-ce9b3",
+    "storage_bucket": "flutterbutter-ce9b3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98254208989:android:1aa84d9521e9549ab74034",
+        "android_client_info": {
+          "package_name": "com.example.flutterbutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98254208989-99hcb71oohu1oainv97lt6e1or9ci23j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB72sSI0Dzx_YItExSq4BHCu4tpd2PnNXY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98254208989-99hcb71oohu1oainv97lt6e1or9ci23j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
