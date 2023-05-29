@@ -7,7 +7,8 @@ import 'package:provider/provider.dart';
 
 class ListingDetailScreen extends StatefulWidget {
   ListItem listItem;
-  ListingDetailScreen({super.key, required this.listItem});
+  bool isBuy = true;
+  ListingDetailScreen({super.key, required this.listItem, this.isBuy = true});
 
   @override
   State<ListingDetailScreen> createState() => _ListingDetailScreenState();
@@ -56,30 +57,31 @@ class _ListingDetailScreenState extends State<ListingDetailScreen> {
           const SizedBox(
             height: 30,
           ),
-          ElevatedButton(
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                          title: const Text("Confirm Purchase"),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                _purchaseItem();
-                                Navigator.of(ctx).pop();
-                              },
-                              child: const Text("Yes"),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(ctx).pop();
-                              },
-                              child: const Text("No"),
-                            ),
-                          ],
-                        ));
-              },
-              child: const Text("Buy Now")),
+          if (widget.isBuy)
+            ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                            title: const Text("Confirm Purchase"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  _purchaseItem();
+                                  Navigator.of(ctx).pop();
+                                },
+                                child: const Text("Yes"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(ctx).pop();
+                                },
+                                child: const Text("No"),
+                              ),
+                            ],
+                          ));
+                },
+                child: const Text("Buy Now")),
         ],
       ),
     );
@@ -87,7 +89,7 @@ class _ListingDetailScreenState extends State<ListingDetailScreen> {
 
   Future<void> _purchaseItem() async {
     await Provider.of<UserData>(context, listen: false)
-        .buyItem(widget.listItem.price)
+        .buyItem(widget.listItem)
         .then((value) => Provider.of<Listings>(context, listen: false)
             .buyItem(widget.listItem, context));
   }

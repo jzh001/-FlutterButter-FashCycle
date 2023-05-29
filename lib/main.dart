@@ -10,6 +10,7 @@ import 'package:flutterbutter/screens/add_listing_screen.dart';
 import 'package:flutterbutter/screens/auth_screen.dart';
 import 'package:flutterbutter/screens/home_screen.dart';
 import 'package:flutterbutter/screens/listings_screen.dart';
+import 'package:flutterbutter/screens/past_transactions_screen.dart';
 import 'package:flutterbutter/screens/profile_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'FlutterButter',
+        title: 'FashCycle',
         theme: ThemeData(
           //https://flatuicolors.com/palette/cn
           colorScheme: ColorScheme.fromSwatch().copyWith(
@@ -57,9 +58,12 @@ class MyApp extends StatelessWidget {
           ListingsScreen.routeName: (ctx) => const ListingsScreen(),
           AddListingScreen.routeName: (ctx) => const AddListingScreen(),
           ProfileScreen.routeName: (ctx) => const ProfileScreen(),
+          PastTransactionsScreen.routeName: (ctx) =>
+              const PastTransactionsScreen(),
         },
         home: FutureBuilder(
-            future: initFirebase(),
+            future: initFirebase().then((value) =>
+                Provider.of<Listings>(context, listen: false).initListings()),
             builder: (ctx, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Scaffold(

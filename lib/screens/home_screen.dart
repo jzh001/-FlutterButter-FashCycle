@@ -7,7 +7,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("FlutterButter")),
+      appBar: AppBar(title: const Text("FashCycle")),
       drawer: const AppDrawer(),
       body: const Center(child: Text("FlutterButter")),
     );

@@ -14,14 +14,18 @@ class Listings with ChangeNotifier {
 
   bool isInit = false;
 
+  Listings() {
+    initListings();
+  }
+
   Future<void> initListings() async {
     //if (isInit) return;
-    log("Running function");
+    print("Running function");
     final listingData = await FirebaseFirestore.instance
         .collection("Listings")
         .limit(100)
         .get();
-    log("Length 1 is ${listingData.docs.length}");
+    print("Length 1 is ${listingData.docs.length}");
     try {
       allListings = listingData.docs
           .map((item) => ListItem(
@@ -36,9 +40,9 @@ class Listings with ChangeNotifier {
               type: item["Type"]))
           .toList();
     } catch (error) {
-      log(error.toString());
+      print(error.toString());
     }
-    log("Length 2 is ${allListings.length}");
+    print("Length 2 is ${allListings.length}");
     isInit = true;
     notifyListeners();
   }
@@ -68,6 +72,7 @@ class Listings with ChangeNotifier {
       "Image Link": imageLink,
       "Buyer": "NIL",
       "Type": type,
+      "Timestamp": DateTime.fromMicrosecondsSinceEpoch(0),
     });
 
     allListings.add(
@@ -98,6 +103,7 @@ class Listings with ChangeNotifier {
         .update({
       "Buyer": Provider.of<UserData>(ctx, listen: false).username,
       "Status": "Bought",
+      "Timestamp": DateTime.now(),
     });
 
     notifyListeners();
@@ -109,6 +115,16 @@ class Listings with ChangeNotifier {
     allListings.removeWhere((item) => item.id == id);
     await FirebaseFirestore.instance.collection("Listings").doc(id).delete();
     notifyListeners();
+  }
+
+  ListItem retrieveByID(String id) {
+    if (allListings.indexWhere((item) => item.id == id) == -1) {
+      print("NOK");
+      print(allListings);
+      print(id);
+    }
+    final ret = allListings.firstWhere((item) => item.id == id);
+    return ret;
   }
 
   Future<void> deleteImageFromFirebase(String imageUrl) async {

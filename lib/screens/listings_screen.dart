@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterbutter/models/listings.dart';
 import 'package:flutterbutter/screens/listing_detail_screen.dart';
@@ -20,27 +21,33 @@ class _ListingsScreenState extends State<ListingsScreen> {
         title: const Text("Listings"),
       ),
       drawer: const AppDrawer(),
-      body: FutureBuilder(
-          future: Provider.of<Listings>(context, listen: false).initListings(),
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection("Listings")
+              .where("Status", isEqualTo: "Active")
+              .snapshots(),
           builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
-
-            final allListings = Provider.of<Listings>(ctx).getCurrentListings();
+            if (!snapshot.hasData) {
+              return const Center(
+                child: Text("No Data Found"),
+              );
+            }
 
             return GridView.count(
                 crossAxisCount: 2,
-                children: allListings
+                children: snapshot.data!.docs
                     .map((item) => MenuTile(
-                        title: item.title,
-                        coverImgLink: item.imageLink,
+                        title: item["Title"],
+                        coverImgLink: item["Image Link"],
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (ctx2) =>
-                                  ListingDetailScreen(listItem: item)));
+                                  ListingDetailScreen(listItem: convertToItem(item))));
                         }))
                     .toList());
           }),
@@ -51,6 +58,9 @@ class _ListingsScreenState extends State<ListingsScreen> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+  ListItem convertToItem(QueryDocumentSnapshot item) {
+    return ListItem(author: item["Author"], buyer: item["Buyer"], description: item["Description"], id: item.id, imageLink: item["Image Link"], price: item["Price"], status: item["Status"], title: item["Title"], type: item["Type"]);
   }
 }
 
@@ -116,4 +126,6 @@ class MenuTile extends StatelessWidget {
       ),
     );
   }
+
+  
 }

@@ -58,6 +58,11 @@ class AppDrawer extends StatelessWidget {
                 Navigator.of(context).pushReplacementNamed('/listings'),
           ),
           ListTile(
+            leading: const Icon(Icons.history),
+            title: const Text("History"),
+            onTap: () => Navigator.of(context).pushReplacementNamed('/history'),
+          ),
+          ListTile(
             leading: const Icon(Icons.logout),
             title: const Text("Logout"),
             onTap: () async {
