@@ -21,5 +21,5 @@ Download the APK file on this Github Repository, labelled app-release.apk.
 Demo video available at https://youtu.be/Kjh8qCxWjKg
 
 ## Data Sources
-Carbon emissions data of different types of fabric: https://hempfoundation.net/7-major-fibers-textiles-in-the-world-and-their-carbon-footprint/
-Fabric data of different types of apparel: https://www.fabricsyard.com/print-by-the-yard-blog/how-much-fabric-do-you-need/
+- Carbon emissions data of different types of fabric: https://hempfoundation.net/7-major-fibers-textiles-in-the-world-and-their-carbon-footprint/
+- Fabric data of different types of apparel: https://www.fabricsyard.com/print-by-the-yard-blog/how-much-fabric-do-you-need/
