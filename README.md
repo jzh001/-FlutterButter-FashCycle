@@ -15,7 +15,11 @@ There were many issues integrating Flutter with Firebase, which held us back fro
 We hope to incorporate elements of machine learning into our app, so that we can more accurately predict the carbon emissions saved based on a larger range of factors, such as the description of the products.
 
 ## Deployment Instructions
-Download the APK file on this Github Repository, labelled app-release.apk.  
+Download the APK file on this Github Repository, labelled app-release.apk.
+
+### Demo Account: 
+Email: john@john.com
+Password: testing123
 
 ## Demo Video
 Demo video available at https://youtu.be/Kjh8qCxWjKg

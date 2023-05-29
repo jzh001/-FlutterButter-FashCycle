@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutterbutter/charts/carbon_line_chart.dart';
 import 'package:flutterbutter/charts/shopping_pie_chart.dart';
 import 'package:flutterbutter/charts/fabric_pie_chart.dart';
+import 'package:flutterbutter/models/user_data.dart';
 import 'package:flutterbutter/widgets/app_drawer.dart';
+import 'package:flutterbutter/widgets/no_data_icon.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -33,25 +36,27 @@ class HomeScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.displaySmall,
                 ),
               )),
-          Expanded(
-            child: SizedBox(
-              child: ListView(children: [
-                CarbonLineChart(
-                  variable: "Carbon Savings",
-                ),
-                const Row(children: [
-                  FabricPieChart(),
-                  ShoppingPieChart(),
-                ]),
-                CarbonLineChart(
-                  variable: "Total Fabric",
-                ),
-                CarbonLineChart(
-                  variable: "Spending",
-                ),
-              ]),
-            ),
-          ),
+          Provider.of<UserData>(context, listen: false).carbonSavings != 0
+              ? Expanded(
+                  child: SizedBox(
+                    child: ListView(children: [
+                      CarbonLineChart(
+                        variable: "Carbon Savings",
+                      ),
+                      const Row(children: [
+                        FabricPieChart(),
+                        ShoppingPieChart(),
+                      ]),
+                      CarbonLineChart(
+                        variable: "Total Fabric",
+                      ),
+                      CarbonLineChart(
+                        variable: "Spending",
+                      ),
+                    ]),
+                  ),
+                )
+              : const NoDataIcon(),
         ],
       ),
     );
