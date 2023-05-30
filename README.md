@@ -17,6 +17,9 @@ We hope to incorporate elements of machine learning into our app, so that we can
 ## Deployment Instructions
 Download the APK file on this Github Repository, labelled app-release.apk.
 
+A limited version can be found as a web app at the following link:
+jzh001.github.io/FashCycle/
+
 ### Demo Account: 
 Email: john@john.com
 Password: testing123

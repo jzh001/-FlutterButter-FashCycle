@@ -19,6 +19,7 @@ class HomeScreen extends StatelessWidget {
       ),
       drawer: const AppDrawer(),
       body: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
               width: double.infinity,
@@ -37,7 +38,8 @@ class HomeScreen extends StatelessWidget {
                 ),
               )),
           Provider.of<UserData>(context, listen: false).carbonSavings != 0
-              ? Expanded(
+              ? SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.7,
                   child: SizedBox(
                     child: ListView(children: [
                       CarbonLineChart(

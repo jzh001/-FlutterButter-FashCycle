@@ -9,7 +9,9 @@ class ShoppingPieChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return SizedBox(
+      height: 300,
+      width: 250,
       child: Card(
         color: Theme.of(context).primaryColorLight,
         child: StreamBuilder(

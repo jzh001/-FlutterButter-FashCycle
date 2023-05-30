@@ -31,7 +31,8 @@ class _CarbonLineChartState extends State<CarbonLineChart> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return SizedBox(
+      height: 300,
       child: Card(
         color: Theme.of(context).primaryColorLight,
         child: chartData.isNotEmpty
