@@ -45,10 +45,12 @@ class HomeScreen extends StatelessWidget {
                       CarbonLineChart(
                         variable: "Carbon Savings",
                       ),
-                      const Row(children: [
-                        FabricPieChart(),
-                        ShoppingPieChart(),
-                      ]),
+                      const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            FabricPieChart(),
+                            ShoppingPieChart(),
+                          ]),
                       CarbonLineChart(
                         variable: "Total Fabric",
                       ),

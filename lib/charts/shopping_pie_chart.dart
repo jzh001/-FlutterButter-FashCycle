@@ -11,7 +11,7 @@ class ShoppingPieChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 300,
-      width: 250,
+      width: MediaQuery.of(context).size.width * 0.4,
       child: Card(
         color: Theme.of(context).primaryColorLight,
         child: StreamBuilder(
